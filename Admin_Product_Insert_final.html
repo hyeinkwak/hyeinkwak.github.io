@@ -34,20 +34,17 @@
         width: 100%;
         display: block;
       }
-
       li span{font-size: large;
         font-weight: bold;
         color: black;
       }
-
       h2{font-weight: bold;
-        letter-spacing: -2.5px;}
-
+        letter-spacing: -2.5px;
+      }
       h4{font-weight: bolder;
           letter-spacing: -3px; 
           word-spacing: 5px;
-        }
-        
+      } 
       h4 span{letter-spacing: -1px;
         word-spacing: 2px;
         vertical-align: middle;
@@ -60,18 +57,63 @@
       .btn {
             background-color: #9A30AE;
             color: none;
-        }
+      }
       button {
           border: none;
           box-shadow:none !important;
       }
+      .inquiry_btn{
+        padding: 0px 10px;
+        text-align: center;
+        overflow: hidden;
+        width: 120px;
+        height: 44px;
+        border-radius: 3px;
+        color: rgb(255, 255, 255);
+        background-color: #9A30AE;
+        border: 0px none;
+        font-size: small;
+        float: right;
+      }
       button:hover {
         background-color: none;
       }
+      
 </style>  
-    </style>
+
+<script>
+  function setThumbnail(event) {
+      var fileUpload = event.target.parentNode; //이벤트 대상자의 부모
+      var reader = new FileReader();
+
+      reader.onload = function(event) {
+        var img = document.createElement("img");
+        fileUpload.appendChild(img);
+        img.setAttribute("src", event.target.result);
+        img.setAttribute("width", 100);
+        img.setAttribute("height", 150);
+        img.setAttribute("class", "pre_img");
+        document.querySelector("div#image_container").appendChild(img);
+      };
+      reader.readAsDataURL(event.target.files[0]);
+
+    //미리 만들어 놓은 div에 text(파일 이름) 추가
+    var name = document.getElementById('fileName');
+    name.textContent = file.name;
+  }
+
+  // Add the following code if you want the name of the file appear on select
+  // $(".custom-file-input").on("change", function() {
+  //   var fileName = $(this).val().split("\\").pop();
+  //   $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+  // });
+
+
+
+</script>
   </head>
-  <body style="width: 1800px;">
+
+  <body style="width: 1800px; margin: auto;">
     <div class="container-fluid">
       <br><br><br>
       <div class="row">
@@ -86,8 +128,16 @@
                   <a href="">상품등록</a>
                   <span>></span>
                 </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <a href="">상품수정</a>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <a href="">상품목록</a>
+                  <span>></span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <a href="">공지사항</a>
+                  <span>></span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <a href="">자주하는 질문</a>
                   <span>></span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -98,15 +148,10 @@
                   <a href="">쿠폰발행</a>
                   <span>></span>
                 </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <a href="">배송관리</a>
-                  <span>></span>
-                </li>
               </ul>
             </div>
           </div>
         </div>
-
         <div class="col-sm-6">
           <div style="width: 800px;">
             <div class="main" style="border-bottom:2px solid black";>
@@ -114,15 +159,15 @@
             </div>
             <br>
               <form id="form" name="form" method="post">
-                  상품번호 <input type="text" class="form-control form-control" name="product_num" autofocus placeholder="상품번호를 입력하세요." />
+                  상품번호 <input type="text" class="form-control form-control" name="productNum" style="border: none;" value="${vo.productNum}" readonly/>
                   <br>
-                  상품명 <input type="text" class="form-control form-control" name="product_name" placeholder="상품명을 입력하세요."/>
+                  상품명 <input type="text" class="form-control form-control" name="productName" autofocus placeholder="상품명을 입력하세요."/>
                   <br>
                   상품정보 <input type="text" class="form-control form-control" name="description" placeholder="상품정보를 입력하세요."/>
                   <br>
                   상품가격 <input type="text" class="form-control form-control" name="price" placeholder="상품가격을 입력하세요."/>
                   <br>
-                  할인율 <input type="text" class="form-control form-control" name="dis_rate" placeholder="할인율을 입력하세요."/>
+                  할인율 <input type="text" class="form-control form-control" name="disRate" placeholder="할인율을 입력하세요."/>
                   <br>
                   할인가격 <input type="text" class="form-control form-control" name="saleprice" placeholder="할인가격을 입력하세요."/>
                   <br>
@@ -130,23 +175,74 @@
                   <br>
                   배송안내 <input type="text" class="form-control form-control" name="delivery" placeholder="배송안내글을 입력하세요."/>
                   <br>
-                  재고 <input type="text" class="form-control form-control" name="stock" placeholder="재고수량을 입력하세요."/>
+                  입고수량 <input type="text" class="form-control form-control" name="stock" placeholder="입고할 수량을 입력하세요."/>
                   <br>
-                  판매자 <input type="text" class="form-control form-control" name="seller" placeholder="판매자를 입력하세요."/> 
+
+                  <!-- <div class="wrap_section_contents">
+                    <ul>
+                      <li>
+                        <button type="button" class="dept1_btn" >
+                          <span>채소 </span>
+                          <span>></span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div> -->
+
+                  카테고리
+                  <div class="form-check">
+                    <table>
+                      <tr>              
+                        <td><input type="radio" class="form-check-input" name="optradio">채소 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td><input type="radio" class="form-check-input" name="optradio">과일•견과•쌀 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td><input type="radio" class="form-check-input" name="optradio">정육•계란 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td><input type="radio" class="form-check-input" name="optradio">수산•해산•건어물 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                      </tr>  
+                      <tr>
+                        <td><input type="radio" class="form-check-input" name="optradio">국•반찬•메인요리 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td><input type="radio" class="form-check-input" name="optradio">샐러드•간편식 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td><input type="radio" class="form-check-input" name="optradio">면•양념•오일 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td><input type="radio" class="form-check-input" name="optradio">생수•음료•우유•커피 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                      </tr> 
+                      <tr> 
+                        <td><input type="radio" class="form-check-input" name="optradio">간식•과자•떡 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td><input type="radio" class="form-check-input" name="optradio">생활용품•리빙•캠핑 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td><input type="radio" class="form-check-input" name="optradio">베이커리•치즈•델리 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td><input type="radio" class="form-check-input" name="optradio">기타 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                      </tr>
+                    </table>
+                  </div>
                   <br>
-                  등록일자 <input type="text" class="form-control form-control" name="regdate" placeholder="등록일자를 입력하세요."/>
+                  판매자 <input type="text" class="form-control form-control" name="seller" value="${vo.seller}" readonly/> 
+                  <br>
+                  등록일자 <input type="text" class="form-control form-control" name="regdate" value="${vo.regdate}" readonly/>
                   <br>
                   상품이미지
-                  <div class="form-group" style="margin: 8px 0 8px;">
-                      <input id="fileName" name="detaile_sys_filename" class="form-control" value="파일선택" disabled="disabled" style="width:85%; display: inline;"/>
+                  <!-- <div class="form-group" style="margin: 8px 0 8px;">
+                      <input id="fileName" class="form-control" value="파일선택" disabled="disabled" style="width:85%; display: inline;"/>
                       <div class="fileUpload">
-                          <input type="file" id="myFileUp" onchange="set"/>
+                          <input type="file" id="image" name="thumSysFilename" onchange="setThumbnail(event);" multiple/>
                       </div>
                       <br>
                       <div class="fileUpload">
-                        <input type="file" id="myFileUp"/>
+                        <input type="file" id="image" name="detaileSysFilename" onchange="setThumbnail(event);" multiple/>
                     </div>
-                  </div>
+                    <br>
+                    <input type="submit" value="파일업로드">
+                  </div> -->
+
+                  <form>
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input" id="customFile" name="filename" onchange="setThumbnail(event);" multiple>
+                      <label class="custom-file-label" for="customFile">썸네일 이미지</label>
+                    </div>
+                    <div id="image_container"></div>
+                    <br><br>
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input" id="customFile2" name="filename" onchange="setThumbnail(event);" multiple>
+                      <label class="custom-file-label" for="customFile2">상세 이미지</label>
+                    </div>
+                  </form>
               </form>
             <div class="col-sm-2"></div>
           </div>
@@ -154,9 +250,9 @@
       </div>
           <br><br>
         <div style="display: flex; justify-content: center;">
-          <button type="button" class="btn" onclick="" style="border: none; color: white;">상품등록</button> &nbsp;&nbsp;
+          <input type="submit" class="btn" onclick="" value="상품등록" style="border: none; color: white; margin-right: 15px;"> 
           <input type="reset" class="btn" style="border: none; color: white;" value="초기화">
         </div>
     </body>
-    </html>
+  </html>
   
